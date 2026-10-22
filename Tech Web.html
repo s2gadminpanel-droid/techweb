@@ -1,0 +1,619 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tech Web</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout concept: a studio page that sells itself the way it sells clients.
+   Hero pairs an Instagram-style profile with the website it turns into.
+   Packages sit beside a DM message builder, because the DM is the real checkout. */
+:root {
+  --bg: #edf0f7;
+  --surface: #ffffff;
+  --fg: #0f1b33;
+  --muted: #55617a;
+  --line: #d3d9e6;
+  --accent: #2646f5;
+  --accent-fg: #ffffff;
+  --sun: #ffc23d;
+  --sun-fg: #0f1b33;
+  --tint: #e1e7fb;
+  --shadow: 0 18px 40px -18px rgba(15, 27, 51, 0.35);
+  --font-display: "Bricolage Grotesque", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Manrope", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1222;
+    --surface: #131c33;
+    --fg: #e8ecf7;
+    --muted: #98a3be;
+    --line: #25304d;
+    --accent: #7790ff;
+    --accent-fg: #0b1222;
+    --sun: #ffc23d;
+    --sun-fg: #0f1b33;
+    --tint: #1a2547;
+    --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1222;
+  --surface: #131c33;
+  --fg: #e8ecf7;
+  --muted: #98a3be;
+  --line: #25304d;
+  --accent: #7790ff;
+  --accent-fg: #0b1222;
+  --sun: #ffc23d;
+  --sun-fg: #0f1b33;
+  --tint: #1a2547;
+  --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -0.025em; line-height: 1.08; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.sec { padding-block: clamp(48px, 8vw, 96px); }
+.eyebrow {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 14px;
+}
+.h2 { font-size: clamp(1.9rem, 4.4vw, 3rem); font-weight: 700; max-width: 18ch; }
+.lead { color: var(--muted); font-size: 1.08rem; max-width: 56ch; margin-top: 16px; }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 22px; border-radius: 999px; border: 2px solid transparent;
+  font: 700 0.98rem/1 var(--font-body); text-decoration: none; cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary { background: var(--accent); color: var(--accent-fg); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--fg); }
+.btn-sun { background: var(--sun); color: var(--sun-fg); }
+.btn-sm { min-height: 40px; padding: 0 16px; font-size: 0.9rem; }
+
+/* header */
+.top { padding-block: 18px; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: -0.03em; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); position: relative; flex: none; }
+.brand-mark::after { content: ""; position: absolute; right: -5px; bottom: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--sun); border: 2px solid var(--bg); }
+
+/* hero */
+.hero { padding-block: clamp(28px, 6vw, 72px) clamp(48px, 8vw, 96px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+.hero h1 { font-size: clamp(2.5rem, 6.4vw, 4.9rem); font-weight: 800; }
+.hl { background: linear-gradient(transparent 62%, var(--sun) 62%, var(--sun) 92%, transparent 92%); padding: 0 .06em; }
+.hero .lead { font-size: 1.15rem; margin-top: 22px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.facts { list-style: none; padding: 0; margin: 34px 0 0; display: flex; flex-wrap: wrap; gap: 10px 26px; color: var(--muted); font-size: 0.92rem; font-weight: 600; }
+.facts li { display: inline-flex; align-items: center; gap: 8px; }
+.facts li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+/* hero visual */
+.stage { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; }
+.phone {
+  grid-column: 1 / 7; grid-row: 1; z-index: 2; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 28px; padding: 16px; box-shadow: var(--shadow); font-size: 0.78rem; line-height: 1.4;
+  transform: rotate(-3deg) translateY(24px);
+}
+.ph-top { display: flex; align-items: center; gap: 12px; }
+.avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--sun); color: var(--sun-fg); display: grid; place-items: center; font: 800 1rem var(--font-display); flex: none; }
+.ph-stats { display: flex; gap: 12px; text-align: center; }
+.ph-stats b { display: block; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.ph-stats span { color: var(--muted); font-size: 0.68rem; }
+.ph-name { font-weight: 700; margin-top: 10px; }
+.ph-bio { color: var(--muted); margin-top: 2px; }
+.ph-link { margin-top: 6px; color: var(--accent); font-weight: 700; display: inline-flex; gap: 6px; align-items: center; }
+.ph-link::before { content: ""; width: 12px; height: 12px; border: 2px solid currentColor; border-radius: 4px; transform: rotate(45deg) scale(.8); }
+.ph-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 12px; }
+.ph-grid i { aspect-ratio: 1; border-radius: 6px; background: var(--tint); display: block; }
+.ph-grid i:nth-child(2n) { background: color-mix(in srgb, var(--sun) 45%, var(--tint)); }
+.ph-grid i:nth-child(3n) { background: color-mix(in srgb, var(--accent) 35%, var(--tint)); }
+
+.browser {
+  grid-column: 5 / 13; grid-row: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: var(--shadow); overflow: hidden; transform: rotate(1.5deg);
+}
+.br-bar { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--tint); }
+.br-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: block; flex: none; }
+.br-url { margin-left: 8px; flex: 1; min-width: 0; background: var(--surface); border-radius: 999px; padding: 3px 12px; font-size: 0.72rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.br-body { padding: 22px 20px 20px; padding-left: 20px; }
+.br-body .tag { font-size: 0.66rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.br-body h3 { font-size: 1.5rem; font-weight: 800; margin-top: 6px; }
+.br-body p { color: var(--muted); font-size: 0.82rem; margin-top: 6px; max-width: 28ch; }
+.br-btn { display: inline-block; margin-top: 14px; background: var(--accent); color: var(--accent-fg); border-radius: 999px; padding: 8px 14px; font-size: 0.78rem; font-weight: 700; }
+.br-prices { margin: 16px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); font-size: 0.8rem; }
+.br-prices li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.br-prices b { font-weight: 700; }
+.demo-note { grid-column: 1 / -1; grid-row: 2; margin-top: 36px; font-size: 0.78rem; color: var(--muted); text-align: right; }
+
+/* benefits */
+.benefits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(24px, 5vw, 72px); margin-top: 40px; }
+.benefit { border-top: 2px solid var(--fg); padding-block: 22px 34px; }
+.benefit h3 { font-size: 1.3rem; font-weight: 700; }
+.benefit p { color: var(--muted); margin-top: 8px; max-width: 46ch; }
+
+/* packages */
+.packs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 40px; align-items: stretch; }
+.pack { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px 24px; display: flex; flex-direction: column; gap: 18px; position: relative; }
+.pack.pop { border: 2px solid var(--accent); box-shadow: var(--shadow); }
+.pop-tag { position: absolute; top: -14px; left: 24px; background: var(--sun); color: var(--sun-fg); font-size: 0.74rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
+.pack h3 { font-size: 1.5rem; font-weight: 700; }
+.pack .for { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+.price { display: flex; align-items: baseline; gap: 8px; font-family: var(--font-display); }
+.price b { font-size: 2.9rem; font-weight: 800; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.price span { color: var(--muted); font-weight: 600; font-family: var(--font-body); }
+.pack ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 0.95rem; flex: 1; }
+.pack li { display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start; }
+.pack li::before { content: ""; width: 10px; height: 6px; border-left: 2.5px solid var(--accent); border-bottom: 2.5px solid var(--accent); transform: rotate(-45deg); margin-top: 6px; }
+.pack .time { font-size: 0.85rem; color: var(--muted); font-weight: 600; border-top: 1px solid var(--line); padding-top: 14px; }
+.addon { margin-top: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 20px 24px; border-radius: 16px; background: var(--tint); }
+.addon b { font-family: var(--font-display); font-size: 1.1rem; }
+.addon span { color: var(--muted); font-size: 0.95rem; }
+
+/* DM builder */
+.builder { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: clamp(20px, 4vw, 40px); margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 48px); }
+.field { display: grid; gap: 8px; margin-bottom: 20px; min-width: 0; }
+.field label, .field legend { font-size: 0.85rem; font-weight: 700; padding: 0; }
+fieldset.field { border: 0; margin: 0 0 20px; padding: 0; }
+.input { width: 100%; min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--fg); font: 500 1rem var(--font-body); }
+.input:focus-visible { outline-offset: 1px; }
+.seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.seg label { display: grid; gap: 2px; padding: 12px; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.92rem; min-width: 0; }
+.seg label small { color: var(--muted); font-weight: 600; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label:has(input:checked) { border-color: var(--accent); background: var(--tint); }
+.seg label:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+.msg-box { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+textarea.input { min-height: 190px; padding: 14px 16px; resize: vertical; line-height: 1.55; }
+.msg-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hint { color: var(--muted); font-size: 0.88rem; }
+
+/* steps */
+.steps { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; counter-reset: s; }
+.steps li { counter-increment: s; border-top: 2px solid var(--fg); padding-top: 16px; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--sun); color: var(--sun-fg); font: 800 1rem var(--font-display); margin-bottom: 14px; }
+.steps h3 { font-size: 1.15rem; font-weight: 700; }
+.steps p { color: var(--muted); font-size: 0.95rem; margin-top: 6px; }
+
+/* terms + faq */
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 6vw, 80px); }
+.terms { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 0; }
+.terms li { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 16px; }
+.terms b { font-weight: 700; }
+.terms span { color: var(--muted); }
+details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+details:first-of-type { border-top: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--accent); flex: none; }
+details[open] summary::after { content: "\2013"; }
+details p { color: var(--muted); margin-top: 10px; max-width: 52ch; }
+.faq { margin-top: 28px; }
+
+/* final cta */
+.final { background: var(--accent); color: var(--accent-fg); padding-block: clamp(48px, 8vw, 88px); }
+.final h2 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 800; max-width: 16ch; }
+.final p { margin-top: 16px; max-width: 48ch; opacity: .92; font-size: 1.08rem; }
+.final .cta-row { margin-top: 28px; }
+.handle { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+.foot { padding-block: 28px; color: var(--muted); font-size: 0.88rem; }
+.foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+  background: var(--fg); color: var(--bg); padding: 12px 20px; border-radius: 999px; font-weight: 700; font-size: 0.92rem;
+  transition: opacity .2s ease, transform .2s ease; z-index: 20; max-width: calc(100vw - 32px); text-align: center;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 960px) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); }
+  .packs { grid-template-columns: minmax(0, 1fr); max-width: 520px; }
+  .builder { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .benefits { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .stage { display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
+  .phone { transform: none; max-width: 300px; align-self: center; width: 100%; }
+  .browser { transform: none; }
+  .demo-note { text-align: left; margin-top: 4px; }
+  .seg { grid-template-columns: minmax(0, 1fr); }
+  .terms li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .btn { width: 100%; }
+  .top .btn { width: auto; }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"></span>Tech Web</a>
+    <a class="btn btn-primary btn-sm" data-dm href="https://ig.me/m/saythazirlanmaq" target="_blank" rel="noopener">DM-də yaz</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Kiçik biznes saytları · Azərbaycan</p>
+        <h1>Instagram səhifən var. İndi <span class="hl">saytın</span> da olsun.</h1>
+        <p class="lead">Müştərilər səni Google-da axtarır, qiymətlərə baxır, xəritədə tapır. Biz səhifən üçün 3–7 gündə mobilə uyğun, WhatsApp və DM düyməli sayt hazırlayırıq.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" data-dm href="https://ig.me/m/saythazirlanmaq" target="_blank" rel="noopener">DM-də yaz</a>
+          <a class="btn btn-ghost" href="#paketler">Paketlərə bax</a>
+        </div>
+        <ul class="facts">
+          <li>3–7 gündə hazır</li>
+          <li>Telefonda rahat açılır</li>
+          <li>Qiymət əvvəlcədən məlum</li>
+        </ul>
+      </div>
+
+      <div class="stage" aria-label="Instagram səhifəsindən sayta nümunə">
+        <div class="phone" aria-hidden="true">
+          <div class="ph-top">
+            <div class="avatar">LB</div>
+            <div class="ph-stats">
+              <div><b>128</b><span>post</span></div>
+              <div><b>4,2 min</b><span>izləyici</span></div>
+              <div><b>310</b><span>izlənir</span></div>
+            </div>
+          </div>
+          <div class="ph-name">lale.beauty</div>
+          <div class="ph-bio">Gözəllik salonu · Bakı<br>Qeydiyyat DM və ya zəng ilə</div>
+          <div class="ph-link">lalebeauty.az</div>
+          <div class="ph-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="browser" aria-hidden="true">
+          <div class="br-bar"><i></i><i></i><i></i><span class="br-url">lalebeauty.az</span></div>
+          <div class="br-body">
+            <div class="tag">Bakı · Nərimanov</div>
+            <h3>Lalə Beauty</h3>
+            <p>Manikür, kirpik və üz baxımı. Əvvəlcədən yazıl, növbə gözləmə.</p>
+            <span class="br-btn">WhatsApp-da yazıl</span>
+            <ul class="br-prices">
+              <li><span>Manikür</span><b>25 AZN</b></li>
+              <li><span>Kirpik</span><b>40 AZN</b></li>
+              <li><span>Üz baxımı</span><b>55 AZN</b></li>
+            </ul>
+          </div>
+        </div>
+        <p class="demo-note">Nümunə layihə, uydurma biznes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="ustunlukler">
+    <div class="wrap">
+      <p class="eyebrow">Saytla nə dəyişir</p>
+      <h2 class="h2">Instagram təqdimat üçündür. Satış üçün sayt lazımdır.</h2>
+      <div class="benefits">
+        <div class="benefit">
+          <h3>Google-da tapılırsan</h3>
+          <p>Instagram-da səni yalnız adını bilən tapır. Sayt isə "Bakıda kirpik" kimi axtarışda çıxa bilər.</p>
+        </div>
+        <div class="benefit">
+          <h3>Qiymətlər bir yerdə</h3>
+          <p>Hər gün DM-də eyni suala cavab yazmırsan. Müştəri qiymət siyahısına özü baxır, sonra qərar verir.</p>
+        </div>
+        <div class="benefit">
+          <h3>Bir toxunuşla əlaqə</h3>
+          <p>WhatsApp, zəng, DM və xəritə düymələri səhifənin hər yerindədir. Müştəri axtarıb vaxt itirmir.</p>
+        </div>
+        <div class="benefit">
+          <h3>Ciddi biznes görünüşü</h3>
+          <p>Öz domenin və səliqəli saytın olanda yeni müştəri sənə daha tez etibar edir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="paketler" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Paketlər</p>
+      <h2 class="h2">Üç paket, gizli ödəniş yoxdur.</h2>
+      <p class="lead">Qiymət sayta daxil olan səhifələrin və imkanların sayına görə dəyişir. Hansının sənə uyğun olduğunu bilmirsənsə, DM-də yaz, birlikdə seçək.</p>
+
+      <div class="packs">
+        <article class="pack">
+          <div>
+            <h3>Başlanğıc</h3>
+            <p class="for">Bio-dakı link üçün sadə vizit kart saytı</p>
+          </div>
+          <div class="price"><b>80</b><span>AZN</span></div>
+          <ul>
+            <li>1 səhifə, mobilə uyğun dizayn</li>
+            <li>Xidmətlər və qiymət siyahısı</li>
+            <li>WhatsApp, zəng və DM düymələri</li>
+            <li>Xəritə və iş saatları</li>
+          </ul>
+          <p class="time">Təhvil: 3 iş günü</p>
+          <button class="btn btn-ghost" type="button" data-pick="Başlanğıc">Bu paketi seç</button>
+        </article>
+
+        <article class="pack pop">
+          <span class="pop-tag">Ən çox seçilən</span>
+          <div>
+            <h3>Biznes</h3>
+            <p class="for">Müştəri qazanmaq istəyən aktiv biznes</p>
+          </div>
+          <div class="price"><b>180</b><span>AZN</span></div>
+          <ul>
+            <li>4–6 səhifə: haqqımızda, xidmətlər, qalereya, əlaqə</li>
+            <li>Sorğu və ya qeydiyyat forması</li>
+            <li>Google-da tapılmaq üçün əsas tənzimləmələr</li>
+            <li>Instagram və digər şəbəkələrə keçidlər</li>
+            <li>1 ay pulsuz kiçik düzəlişlər</li>
+          </ul>
+          <p class="time">Təhvil: 5–7 iş günü</p>
+          <button class="btn btn-primary" type="button" data-pick="Biznes">Bu paketi seç</button>
+        </article>
+
+        <article class="pack">
+          <div>
+            <h3>Premium</h3>
+            <p class="for">Onlayn sifariş və ya satış istəyən mağaza</p>
+          </div>
+          <div class="price"><b>350</b><span>AZN</span></div>
+          <ul>
+            <li>10-a qədər səhifə və ya məhsul bölməsi</li>
+            <li>Onlayn sifariş və ya rezervasiya sistemi</li>
+            <li>Məhsul kataloqu, filtrlər, səbət</li>
+            <li>Ətraflı Google axtarış tənzimləməsi</li>
+            <li>2 ay pulsuz kiçik düzəlişlər</li>
+          </ul>
+          <p class="time">Təhvil: 10–14 iş günü</p>
+          <button class="btn btn-ghost" type="button" data-pick="Premium">Bu paketi seç</button>
+        </article>
+      </div>
+
+      <div class="addon">
+        <div><b>Aylıq dəstək, 15 AZN</b></div>
+        <span>Mətn, qiymət və şəkil yeniləmələri, hosting nəzarəti, texniki problemlərin həlli. İstəyə bağlıdır.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="dm" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">DM mesajı</p>
+      <h2 class="h2">Mesajı hazırla, DM-də göndər.</h2>
+      <p class="lead">Paketi seç, adını yaz. Mesaj hazır olacaq. Kopyala və DM açılanda yapışdır.</p>
+
+      <div class="builder">
+        <div>
+          <fieldset class="field">
+            <legend>Paket</legend>
+            <div class="seg" id="seg">
+              <label><input type="radio" name="pkg" value="Başlanğıc"><span>Başlanğıc</span><small>80 AZN</small></label>
+              <label><input type="radio" name="pkg" value="Biznes" checked><span>Biznes</span><small>180 AZN</small></label>
+              <label><input type="radio" name="pkg" value="Premium"><span>Premium</span><small>350 AZN</small></label>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="biz">Biznesinin adı</label>
+            <input class="input" id="biz" type="text" placeholder="məsələn, Lalə Beauty" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="ig">Instagram səhifən</label>
+            <input class="input" id="ig" type="text" placeholder="@sehifeniz" autocomplete="off">
+          </div>
+          <p class="hint">DM açılanda mesajı yapışdırmaq üçün mesaj sahəsinə uzun toxun və "Yapışdır" seç.</p>
+        </div>
+        <div class="msg-box">
+          <label class="field" style="margin:0">
+            <span style="font-size:.85rem;font-weight:700">Göndəriləcək mesaj</span>
+            <textarea class="input" id="msg" readonly></textarea>
+          </label>
+          <div class="msg-actions">
+            <button class="btn btn-ghost" type="button" id="copy">Mesajı kopyala</button>
+            <a class="btn btn-primary" id="dm-go" data-dm href="https://ig.me/m/saythazirlanmaq" target="_blank" rel="noopener">Kopyala və DM aç</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Necə işləyirik</p>
+      <h2 class="h2">DM-dən təhvilə qədər dörd addım.</h2>
+      <ol class="steps">
+        <li>
+          <h3>DM yazırsan</h3>
+          <p>Biznesin, istədiyin paket və nələrin görünməsini istədiyin haqqında qısa məlumat göndərirsən.</p>
+        </li>
+        <li>
+          <h3>Razılaşırıq</h3>
+          <p>Qiyməti, tarixi və nələrin daxil olduğunu yazılı təsdiq edirik. Sonra 50% ön ödəniş edilir.</p>
+        </li>
+        <li>
+          <h3>Sayt hazırlanır</h3>
+          <p>Şəkil və mətnləri səndən alırıq. Hazır olan səhifəni link ilə göndəririk, sən baxıb qeydlərini yazırsan.</p>
+        </li>
+        <li>
+          <h3>Təhvil</h3>
+          <p>Düzəlişlərdən sonra qalan 50% ödənilir. Sayt domenə bağlanır və canlıya çıxır.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow">Şərtlər</p>
+        <h2 class="h2">Əvvəlcədən yazılı razılaşırıq.</h2>
+        <ul class="terms">
+          <li><b>Ödəniş</b><span>50% başlamazdan əvvəl, 50% təhvildən sonra.</span></li>
+          <li><b>Düzəlişlər</b><span>Hər paketə 2 düzəliş dövrü daxildir. Əlavə dəyişiklik ayrıca razılaşdırılır.</span></li>
+          <li><b>Domen və hosting</b><span>Qiymətə daxil deyil. Sənin adına alınır, hesab səndə qalır.</span></li>
+          <li><b>Şəkil və loqo</b><span>Yalnız sənin təqdim etdiyin və ya istifadə hüququ olan materiallardan istifadə olunur.</span></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow">Tez-tez verilən suallar</p>
+        <h2 class="h2">Əvvəl bunu soruşurlar.</h2>
+        <div class="faq">
+          <details>
+            <summary>Mənim artıq Instagram səhifəm var, sayt niyə lazımdır?</summary>
+            <p>Instagram-da səni yalnız səhifənə daxil olanlar görür. Saytı isə Google-da axtaran yeni müştərilər də tapır, qiymətlərə və ünvana bir yerdən baxır.</p>
+          </details>
+          <details>
+            <summary>Şəkilləri və mətnləri kim hazırlayır?</summary>
+            <p>Şəkilləri sən göndərirsən, Instagram-dakı şəkillərdən də istifadə edə bilərik. Mətnləri qısa suallar əsasında biz yazırıq, sən təsdiq edirsən.</p>
+          </details>
+          <details>
+            <summary>Hazır olandan sonra özüm dəyişiklik edə bilərəm?</summary>
+            <p>Kiçik dəyişikliklər üçün bizə yaz, aylıq dəstək paketi bunu əhatə edir. Sayt sənin domenində olduğuna görə istədiyin vaxt başqa mütəxəssisə də verə bilərsən.</p>
+          </details>
+          <details>
+            <summary>Neçə günə hazır olur?</summary>
+            <p>Başlanğıc paket 3, Biznes 5–7, Premium 10–14 iş günü çəkir. Gün sayı şəkil və mətnləri nə qədər tez göndərməyindən də asılıdır.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2>Səhifənin adını DM-də yaz.</h2>
+      <p>Sənə uyğun paketi deyək və saytın nə vaxt hazır olacağını dəqiq yazaq.</p>
+      <div class="cta-row">
+        <a class="btn btn-sun" data-dm href="https://ig.me/m/saythazirlanmaq" target="_blank" rel="noopener">DM-də yaz</a>
+        <span class="handle" style="align-self:center" data-handle>@saythazirlanmaq</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Tech Web</span>
+    <span>Kiçik bizneslər üçün saytlar</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  // Dəyişdir: Instagram istifadəçi adın (@ olmadan)
+  var HANDLE = "saythazirlanmaq";
+  var PRICES = { "Başlanğıc": 80, "Biznes": 180, "Premium": 350 };
+
+  var dmUrl = "https://ig.me/m/" + HANDLE;
+  document.querySelectorAll("[data-dm]").forEach(function (a) { a.href = dmUrl; });
+  document.querySelectorAll("[data-handle]").forEach(function (n) { n.textContent = "@" + HANDLE; });
+
+  var biz = document.getElementById("biz");
+  var ig = document.getElementById("ig");
+  var msg = document.getElementById("msg");
+  var toastEl = document.getElementById("toast");
+  var toastTimer;
+
+  function currentPkg() {
+    var r = document.querySelector('input[name="pkg"]:checked');
+    return r ? r.value : "Biznes";
+  }
+
+  function build() {
+    var pkg = currentPkg();
+    var name = biz.value.trim();
+    var my = ig.value.trim().replace(/^@/, "");
+    var lines = ["Salam! " + pkg + " paketi (" + PRICES[pkg] + " AZN) ilə maraqlanıram."];
+    lines.push("Biznesimin adı: " + (name || "..."));
+    lines.push("Instagram səhifəm: " + (my ? "@" + my : "..."));
+    lines.push("Sayt neçə günə hazır ola bilər və əvvəlcə nə göndərməliyəm?");
+    msg.value = lines.join("\n");
+  }
+
+  function toast(text) {
+    toastEl.textContent = text;
+    toastEl.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("on"); }, 2600);
+  }
+
+  function copyMsg() {
+    var text = msg.value;
+    function fallback() {
+      try {
+        msg.focus();
+        msg.select();
+        var ok = document.execCommand("copy");
+        toast(ok ? "Mesaj kopyalandı. DM-də yapışdır." : "Mesajı seçib kopyala.");
+      } catch (e) {
+        toast("Mesajı seçib kopyala.");
+      }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          toast("Mesaj kopyalandı. DM-də yapışdır.");
+        }, fallback);
+      } else {
+        fallback();
+      }
+    } catch (e) {
+      fallback();
+    }
+  }
+
+  document.querySelectorAll('input[name="pkg"]').forEach(function (r) { r.addEventListener("change", build); });
+  biz.addEventListener("input", build);
+  ig.addEventListener("input", build);
+  document.getElementById("copy").addEventListener("click", copyMsg);
+  document.getElementById("dm-go").addEventListener("click", copyMsg);
+
+  document.querySelectorAll("[data-pick]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = b.getAttribute("data-pick");
+      document.querySelectorAll('input[name="pkg"]').forEach(function (r) { r.checked = (r.value === v); });
+      build();
+      var target = document.getElementById("dm");
+      if (target && target.scrollIntoView) target.scrollIntoView({ block: "start" });
+    });
+  });
+
+  build();
+})();
+</script>
+
+</body></html>
